@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1092258315550",
+    "project_id": "artist-b90dd",
+    "storage_bucket": "artist-b90dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092258315550:android:d527b8c1347c4a7ed95d0f",
+        "android_client_info": {
+          "package_name": "com.example.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092258315550-coi64qe4gov623ngh421ecvgstkm5132.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa7m4DVm7vEeSiGI5Akv8fUdp7Lk8wPR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092258315550-coi64qe4gov623ngh421ecvgstkm5132.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
