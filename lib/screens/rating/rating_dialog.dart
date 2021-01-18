@@ -1,18 +1,58 @@
 import 'package:demo/app_properties.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
+import 'package:demo/provider/user.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class RatingDialog extends StatelessWidget {
+class RatingDialog extends StatefulWidget {
+  final String productname;
+  final String docid;
+
+  const RatingDialog(this.productname, this.docid);
+  @override
+  _RatingDialogState createState() => _RatingDialogState();
+}
+
+class _RatingDialogState extends State<RatingDialog> {
+  double rating = 1.0;
+  String desc = "";
+  String name = "";
   @override
   Widget build(BuildContext context) {
+    CUser user = Provider.of<CUser>(context);
     double width = MediaQuery.of(context).size.width;
 
     Widget payNow = InkWell(
       onTap: () async {
-        Navigator.of(context).pop();
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => CheckOutPage()));
+        await FirebaseFirestore.instance
+            .collection("ArtistUser")
+            .doc(user.uid)
+            .snapshots()
+            .map((e) {
+          print(e);
+          name = e["name"].toString();
+        });
+        print(name);
+        // Navigator.of(context).pop();
+        await FirebaseFirestore.instance
+            .collection("Comments")
+            .doc(widget.docid)
+            .collection("Paintings")
+            .doc(user.uid)
+            .set({
+          'desc': desc,
+          'rating': rating,
+          'name': name,
+        });
+        Navigator.pop(context);
+        // FirebaseFirestore.instance.collection("Comments").doc("asdfa").set({
+        //   'desc':controller,
+
+        // });
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (_) => CheckOutPage()));
       },
       child: Container(
         height: 60,
@@ -28,7 +68,7 @@ class RatingDialog extends StatelessWidget {
             ],
             borderRadius: BorderRadius.circular(9.0)),
         child: Center(
-          child: Text("Pay Now",
+          child: Text("Submit",
               style: const TextStyle(
                   color: const Color(0xfffefefe),
                   fontWeight: FontWeight.w600,
@@ -46,6 +86,35 @@ class RatingDialog extends StatelessWidget {
               color: Colors.grey[50]),
           padding: EdgeInsets.all(24.0),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
+            // Container(
+            //     height: 100.0,
+            //     child: StreamBuilder<DocumentSnapshot>(
+            //         // <2> Pass `Future<QuerySnapshot>` to future
+            //         stream: FirebaseFirestore.instance
+            //             .collection('ArtistUser')
+            //             .doc(user.uid)
+            //             .snapshots(),
+            //         builder: (context, snapshot) {
+            //           switch (snapshot.connectionState) {
+            //             case ConnectionState.waiting:
+            //               return new Center(
+            //                   child: new CircularProgressIndicator());
+            //             default:
+            //               // StreamBuilder(
+            //               //     stream: FirebaseFirestore.instance
+            //               //         .collection('ArtistUser')
+            //               //         .doc(user.uid)
+            //               //         .snapshots(),
+            //               //     builder: (context, snapshot) {
+            //               //       if (!snapshot.hasData) {
+            //               //         return new Text("Loading");
+            //               //       }
+            //               var userDocument = snapshot.data;
+            //               print(userDocument["name"]);
+            //               // name = userDocumentname;
+            //               return Container();
+            //           }
+            //         })),
             Text(
               'Thank You!',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -61,7 +130,7 @@ class RatingDialog extends StatelessWidget {
                         text: 'You rated ',
                       ),
                       TextSpan(
-                          text: 'Boat Rockerz 350 On-Ear Bluetooth Headphones',
+                          text: widget.productname,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[600]))
@@ -81,11 +150,11 @@ class RatingDialog extends StatelessWidget {
               noRatingWidget: Icon(Icons.favorite_border,
                   color: Color(0xffFF8993), size: 32),
               onRatingUpdate: (value) {
-//              setState(() {
-//                rating = value;
-//              });
+                setState(() {
+                  rating = value;
+                });
 
-                print(value);
+                // print(value);
               },
             ),
             Container(
@@ -95,7 +164,8 @@ class RatingDialog extends StatelessWidget {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 child: TextField(
-                  controller: TextEditingController(),
+                  onChanged: (val) => setState(() => desc = val),
+                  // controller: TextEditingController(),
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,

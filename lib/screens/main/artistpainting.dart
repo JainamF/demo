@@ -63,6 +63,7 @@ class _ArtistPaintingState extends State<ArtistPainting> {
                       child: Column(
                         children: [
                           ProductList(
+                            docid: doc[index].id,
                             products: products,
                           ),
                           SizedBox(

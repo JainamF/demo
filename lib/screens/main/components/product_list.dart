@@ -1,4 +1,5 @@
 import 'package:demo/models/product.dart';
+import 'package:demo/screens/product/components/rating_bottomSheet.dart';
 import 'package:demo/screens/product/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -6,10 +7,11 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 // ignore: must_be_immutable
 class ProductList extends StatelessWidget {
   List<Product> products;
+  String docid;
 
   final SwiperController swiperController = SwiperController();
 
-  ProductList({Key key, this.products}) : super(key: key);
+  ProductList({Key key, this.docid, this.products}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,10 @@ class ProductList extends StatelessWidget {
           itemCount: products.length,
           itemBuilder: (_, index) {
             return ProductCard(
-                height: cardHeight, width: cardWidth, product: products[index]);
+                docid: docid,
+                height: cardHeight,
+                width: cardWidth,
+                product: products[index]);
           },
           scale: 0.8,
           controller: swiperController,
@@ -95,18 +100,20 @@ class ProductList extends StatelessWidget {
 // }
 
 class ProductCard extends StatelessWidget {
+  final String docid;
   final Product product;
   final double height;
   final double width;
 
-  const ProductCard({Key key, this.product, this.height, this.width})
+  const ProductCard(
+      {Key key, this.docid, this.product, this.height, this.width})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => ProductPage(product: product))),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => ProductPage(docid: docid, product: product))),
       child: Stack(
         children: <Widget>[
           Container(
@@ -123,7 +130,10 @@ class ProductCard extends StatelessWidget {
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.favorite_border),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => RatingBottomSheet()));
+                  },
                   color: Colors.red,
                 ),
                 Column(

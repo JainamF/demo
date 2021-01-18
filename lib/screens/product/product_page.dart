@@ -10,8 +10,9 @@ import 'components/product_display.dart';
 
 class ProductPage extends StatefulWidget {
   final Product product;
+  final String docid;
 
-  ProductPage({Key key, this.product}) : super(key: key);
+  ProductPage({Key key, this.docid, this.product}) : super(key: key);
 
   @override
   _ProductPageState createState() => _ProductPageState(product);
@@ -92,6 +93,7 @@ class _ProductPageState extends State<ProductPage> {
                   height: 80.0,
                 ),
                 ProductDisplay(
+                  docid: widget.docid,
                   product: product,
                 ),
                 SizedBox(

@@ -1,12 +1,14 @@
 import 'package:demo/app_properties.dart';
 import 'package:demo/models/product.dart';
+import 'package:demo/screens/rating/rating_page.dart';
 // import 'package:artist/screens/rating/rating_page.dart';
 import 'package:flutter/material.dart';
 
 class ProductDisplay extends StatelessWidget {
   final Product product;
+  final String docid;
 
-  const ProductDisplay({Key key, this.product}) : super(key: key);
+  const ProductDisplay({Key key, this.docid, this.product}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -82,7 +84,13 @@ class ProductDisplay extends StatelessWidget {
           left: 20.0,
           bottom: 0.0,
           child: RawMaterialButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => RatingPage(
+                        docid: docid,
+                        product: product,
+                      ))),
+            },
             // Navigator.of(context)
             //     .push(MaterialPageRoute(builder: (_) => RatingPage())),
             constraints: const BoxConstraints(minWidth: 45, minHeight: 45),
