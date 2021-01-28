@@ -113,6 +113,10 @@ class AuthService {
     }
   }
 
+  Future sendPasswordResetEmail(String email) async {
+    return _auth.sendPasswordResetEmail(email: email);
+  }
+
   // Future<void> resendEmailVerification() async {
   //   final User user = _auth.currentUser;
   //   user.sendEmailVerification();

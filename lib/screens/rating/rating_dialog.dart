@@ -16,6 +16,20 @@ class RatingDialog extends StatefulWidget {
 }
 
 class _RatingDialogState extends State<RatingDialog> {
+  Future username(String docId) async {
+    try {
+      // Get reference to Firestore collection
+      var collectionRef = FirebaseFirestore.instance.collection('NormalUser');
+
+      var doc = await collectionRef.doc(docId).get();
+      // print(doc.data());
+      // print(doc['Likes']);
+      return doc['name'];
+    } catch (e) {
+      throw e;
+    }
+  }
+
   double rating = 1.0;
   String desc = "";
   String name = "";
@@ -27,16 +41,6 @@ class _RatingDialogState extends State<RatingDialog> {
     Widget payNow = InkWell(
       onTap: () async {
         await FirebaseFirestore.instance
-            .collection("ArtistUser")
-            .doc(user.uid)
-            .snapshots()
-            .map((e) {
-          print(e);
-          name = e["name"].toString();
-        });
-        print(name);
-        // Navigator.of(context).pop();
-        await FirebaseFirestore.instance
             .collection("Comments")
             .doc(widget.docid)
             .collection("Paintings")
@@ -44,7 +48,7 @@ class _RatingDialogState extends State<RatingDialog> {
             .set({
           'desc': desc,
           'rating': rating,
-          'name': name,
+          'name': await username(user.uid.toString()),
         });
         Navigator.pop(context);
         // FirebaseFirestore.instance.collection("Comments").doc("asdfa").set({

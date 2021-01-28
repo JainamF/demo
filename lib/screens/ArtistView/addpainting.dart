@@ -263,6 +263,11 @@ class _AddPaintingState extends State<AddPainting> {
                                         'description': description,
                                         'name': name,
                                         'img': img,
+                                      }).then((value) {
+                                        FirebaseFirestore.instance
+                                            .collection("Comments")
+                                            .doc(value.id)
+                                            .set({'Likes': 0});
                                       });
 
                                       Navigator.of(context).pushAndRemoveUntil(

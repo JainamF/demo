@@ -1,5 +1,5 @@
 import 'package:demo/helpers/style.dart';
-import 'package:demo/screens/Authenticate/resetpassword.dart';
+import 'package:demo/screens/Authenticate/login.dart';
 // import 'package:artist/provider/user.dart';
 import 'package:demo/screens/Authenticate/signup.dart';
 import 'package:demo/screens/main/main_page.dart';
@@ -11,42 +11,42 @@ import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Login extends StatefulWidget {
+class ResetPassword extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-class _LoginState extends State<Login> {
-  Future<bool> checkIfDocExists(String docId) async {
-    try {
-      // Get reference to Firestore collection
-      var collectionRef = FirebaseFirestore.instance.collection('ArtistUser');
+class _ResetPasswordState extends State<ResetPassword> {
+  // Future<bool> checkIfDocExists(String docId) async {
+  //   try {
+  //     // Get reference to Firestore collection
+  //     var collectionRef = FirebaseFirestore.instance.collection('ArtistUser');
 
-      var doc = await collectionRef.doc(docId).get();
-      return doc.exists;
-    } catch (e) {
-      throw e;
-    }
-  }
+  //     var doc = await collectionRef.doc(docId).get();
+  //     return doc.exists;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
-  Future<bool> artistapproved(String docId) async {
-    try {
-      // Get reference to Firestore collection
-      var collectionRef = FirebaseFirestore.instance.collection('ArtistUser');
+  // Future<bool> artistapproved(String docId) async {
+  //   try {
+  //     // Get reference to Firestore collection
+  //     var collectionRef = FirebaseFirestore.instance.collection('ArtistUser');
 
-      var doc = await collectionRef.doc(docId).get();
-      return doc.data()['approved'];
-    } catch (e) {
-      throw e;
-    }
-  }
+  //     var doc = await collectionRef.doc(docId).get();
+  //     return doc.data()['approved'];
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
 
   TextEditingController _email = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  // TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -119,35 +119,35 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
-                          child: Material(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.grey.withOpacity(0.3),
-                            elevation: 0.0,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12.0),
-                              child: TextFormField(
-                                controller: _password,
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Password",
-                                  icon: Icon(Icons.lock_outline),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "The password field cannot be empty";
-                                  } else if (value.length < 6) {
-                                    return "the password has to be at least 6 characters long";
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding:
+                        //       const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                        //   child: Material(
+                        //     borderRadius: BorderRadius.circular(10.0),
+                        //     color: Colors.grey.withOpacity(0.3),
+                        //     elevation: 0.0,
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.only(left: 12.0),
+                        //       child: TextFormField(
+                        //         controller: _password,
+                        //         obscureText: true,
+                        //         decoration: InputDecoration(
+                        //           border: InputBorder.none,
+                        //           hintText: "Password",
+                        //           icon: Icon(Icons.lock_outline),
+                        //         ),
+                        //         validator: (value) {
+                        //           if (value.isEmpty) {
+                        //             return "The password field cannot be empty";
+                        //           } else if (value.length < 6) {
+                        //             return "the password has to be at least 6 characters long";
+                        //           }
+                        //           return null;
+                        //         },
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Padding(
                           padding:
                               const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
@@ -158,43 +158,51 @@ class _LoginState extends State<Login> {
                               child: MaterialButton(
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
-                                    dynamic result =
-                                        await _auth.signInWithEmailAndPassword(
-                                            _email.text, _password.text);
-                                    if (result == null) {
-                                      _key.currentState.showSnackBar(SnackBar(
-                                          content: Text(
-                                              "Sign in failed or Email is not verified yet")));
-                                    } else {
-                                      bool docExists = await checkIfDocExists(
-                                          result.toString());
-                                      if (docExists) {
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        UserArtist(
-                                                          result.toString(),
-                                                        )),
-                                                (Route<dynamic> route) =>
-                                                    false);
-                                      } else {
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            MainPage(result
-                                                                .toString())),
-                                                (Route<dynamic> route) =>
-                                                    false);
-                                      }
-                                    }
+                                    _key.currentState.showSnackBar(SnackBar(
+                                        duration: const Duration(seconds: 4),
+                                        content: Text(
+                                            "Reset Email has been sent to your email id")));
+                                    await _auth
+                                        .sendPasswordResetEmail(_email.text);
+
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()),
+                                        (Route<dynamic> route) => false);
+                                    // if (result == null) {
+                                    //   _key.currentState.showSnackBar(SnackBar(
+                                    //       content: Text(
+                                    //           "Sign in failed or Email is not verified yet")));
+                                    // } else {
+                                    //   bool docExists = await checkIfDocExists(
+                                    //       result.toString());
+                                    //   if (docExists) {
+                                    //     Navigator.of(context)
+                                    //         .pushAndRemoveUntil(
+                                    //             MaterialPageRoute(
+                                    //                 builder: (context) =>
+                                    //                     UserArtist(
+                                    //                       result.toString(),
+                                    //                     )),
+                                    //             (Route<dynamic> route) =>
+                                    //                 false);
+                                    //   } else {
+                                    //     Navigator.of(context)
+                                    //         .pushAndRemoveUntil(
+                                    //             MaterialPageRoute(
+                                    //                 builder:
+                                    //                     (context) =>
+                                    //                         MainPage(result
+                                    //                             .toString())),
+                                    //             (Route<dynamic> route) =>
+                                    //                 false);
+                                    //   }
+                                    // }
                                   }
                                 },
                                 minWidth: MediaQuery.of(context).size.width,
                                 child: Text(
-                                  "Login",
+                                  "Reset",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.white,
@@ -206,32 +214,28 @@ class _LoginState extends State<Login> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Text(
+                            //     "Forgot password",
+                            //     textAlign: TextAlign.center,
+                            //     style: TextStyle(
+                            //       color: black,
+                            //       fontWeight: FontWeight.w400,
+                            //     ),
+                            //   ),
+                            // ),
                             Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
+                                      Navigator.of(context).pushAndRemoveUntil(
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ResetPassword()));
+                                              builder: (context) => Login()),
+                                          (Route<dynamic> route) => false);
                                     },
                                     child: Text(
-                                      "Reset Password",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.black),
-                                    ))),
-                            Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => SignUp()));
-                                    },
-                                    child: Text(
-                                      "Create an account",
+                                      "Back to Sign In",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.black),
                                     ))),
